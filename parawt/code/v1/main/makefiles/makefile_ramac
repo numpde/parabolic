@@ -1,0 +1,28 @@
+
+include ./makefiles/makefile_common
+
+CPP_PATH = 
+CPP_OPT = -std=c++11 -DNDEBUG -O2 -D_GLIBCXX_USE_NANOSLEEP
+CPP = g++
+RUN = 
+CPP_INCLUDE_PATH = -I/usr/local/Cellar/open-mpi/1.8/include/ -I/usr/local/Cellar/boost/1.58.0/include/
+CPP_LIBRARY_PATH = -L/usr/local/Cellar/open-mpi/1.8/lib/     -L/usr/local/Cellar/boost/1.58.0/lib/ 
+CPP_LIBRARY_LINK = -lboost_mpi-mt -lmpi -lmpi_cxx -lboost_serialization-mt -lopenblas 
+VERSIONFILE = version.txt
+
+TARGET = ../test/multivector_AWT.cpp
+
+version:
+	@echo                        >  $(VERSIONFILE)
+	@echo "COMPILER VERSION: "   >> $(VERSIONFILE)
+	@$(CPP) --version            >> $(VERSIONFILE)
+	@echo "BEGIN MAKEFILE: ----" >> $(VERSIONFILE)
+	@cat makefile                >> $(VERSIONFILE)
+	@echo "END MAKEFILE -------" >> $(VERSIONFILE)
+
+compile: version
+	$(CPP) main.cpp $(TARGET) $(CPP_OPT) $(CPP_INCLUDE_PATH) $(CPP_LIBRARY_PATH) $(CPP_LIBRARY_LINK)
+ 
+run:
+	$(RUN) ./a.out > cout1.log 2> cerr1.log
+

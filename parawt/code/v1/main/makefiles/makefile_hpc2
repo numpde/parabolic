@@ -1,0 +1,66 @@
+SHELL = /bin/bash
+
+include ./makefiles/makefile_common
+
+CPP_PATH = 
+CPP_OPT = -v -std=c++11 -DNDEBUG -O2 
+# -DMPI_NO_CPPBIND
+CPP = g++-4.9.2
+RUN = 
+CPP_INCLUDE_PATH = \
+	-I/opt/dev/bibliotheques/openmpi-1.8.3/include/ \
+	-I/opt/dev/bibliotheques/boost-1.57/include/ \
+	-I/users/home/andreev/install/opt/dev/bibliotheques/boost-numeric-bindings \
+	-I/users/home/andreev/install/tmp/umfpack-4.4/UMFPACK/Include/ \
+	-I/users/home/andreev/test000/002/include
+CPP_LIBRARY_PATH = \
+	-L/opt/dev/bibliotheques/openmpi-1.8.3/lib/ \
+	-L/opt/dev/bibliotheques/boost-1.57/lib/ \
+	-L/users/home/andreev/install/lib/ \
+	-L/users/home/andreev/install/tmp/umfpack-4.4/UMFPACK/Lib/ \
+	-L/users/home/andreev/install/tmp/umfpack-4.4/AMD/Lib/ 
+CPP_LIBRARY_LINK = -lboost_mpi -lmpi -lmpi_cxx -lboost_serialization -lopenblas -lumfpack -lamd
+VERSIONFILE = version.txt
+
+TARGET = ../test/Solver-FEM2009.cpp
+
+module:
+	@echo Reference:
+	@echo https://intranet.ljll.math.upmc.fr/wiki/doku.php/informatique:hpc2:module
+	@echo Do:
+	@echo module load Boost/gcc-4.9.2/1.57
+	@echo module load gcc/4.9.2 
+	@#
+	@#echo module load SGI-Mpi/2.10
+	@#echo OR
+	@#echo module load intel-C++/15.0
+	@#echo module load INTEL-Mpi/5.0.1
+	@#echo module load MKL/11.2.0
+
+version:
+	@echo "Comments on this run"  > $(VERSIONFILE)
+	@echo ""                     >> $(VERSIONFILE)
+	@echo "COMPILER VERSION: "   >> $(VERSIONFILE)
+	@$(CPP) --version            >> $(VERSIONFILE)
+	@echo "BEGIN MAKEFILE: ----" >> $(VERSIONFILE)
+	@cat makefile                >> $(VERSIONFILE)
+	@echo "END MAKEFILE -------" >> $(VERSIONFILE)
+	@nano -w $(VERSIONFILE)
+
+compile: version
+	$(CPP) main.cpp $(TARGET) $(CPP_OPT) $(CPP_INCLUDE_PATH) $(CPP_LIBRARY_PATH) $(CPP_LIBRARY_LINK)
+ 
+run:
+	./a.out > cout1.log 2> cerr1.log
+
+collect:
+	for i in $$(ls -d output*.hpc2); do n=$$(echo $$i | cut -d '.' -f 2); \
+		echo $$n; \
+		o=$$(echo *.o$$n | tail -n 1); \
+		if [ ! -f $$o ]; then continue; fi; \
+		mv -v $$o $$i; \
+		cp $$(find . | grep make_doplotpy.sh | grep -v svn | tail -n 1) $$i; \
+		svn add $$i --force; \
+		cd $$i; ./make_doplotpy.sh $$o; cd ..; \
+		svn add $$i/do_*.py; \
+	done
