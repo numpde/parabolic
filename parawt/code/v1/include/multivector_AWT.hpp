@@ -1,6 +1,5 @@
 //
 //  multivector_AWT.hpp
-//  round1
 //
 //  R. Andreev, 2014-2015
 //

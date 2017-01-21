@@ -1,9 +1,7 @@
 //
 //  reporter.hpp
-//  round1
 //
-//  Created by r. on 18/07/15.
-//  Copyright (c) 2015 LJLL. All rights reserved.
+//  Created by r. on 18/07/15
 //
 
 // Example usage:

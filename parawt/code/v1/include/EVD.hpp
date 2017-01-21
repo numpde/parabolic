@@ -1,9 +1,7 @@
 //
 //  EVD.hpp
-//  round1
 //
-//  Created by r. on 08/05/14.
-//  Copyright (c) 2014 RICAM. All rights reserved.
+//  Created by r. on 08/05/14
 //
 
 #ifndef round1_EVD_hpp

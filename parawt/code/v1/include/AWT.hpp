@@ -1,10 +1,7 @@
 //
 //  AWT.hpp
-//  round1
 //
-//  Created by r. on 10/05/14.
-//  Modeled on code by R. Andreev, 2013.12.06
-//  Copyright (c) 2014 RICAM. All rights reserved.
+//  Created by r. on 10/05/14 (using code from 2013.12.06)
 //
 
 #ifndef round1_AWT_hpp
